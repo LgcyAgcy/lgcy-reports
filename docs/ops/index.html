@@ -105,6 +105,8 @@
   .btn-aprovar:hover { border-color: var(--green); color: var(--green); }
   .btn-cr { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Arimo', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; padding: 6px 14px; border-radius: 3px; cursor: pointer; white-space: nowrap; }
   .btn-cr:hover { border-color: var(--amber); color: var(--amber); }
+  .btn-deletar { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Arimo', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; padding: 6px 14px; border-radius: 3px; cursor: pointer; white-space: nowrap; }
+  .btn-deletar:hover { border-color: var(--red); color: var(--red); }
 
   .deliverable-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
   .deliverable-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr auto; gap: 8px; align-items: end; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; }
@@ -514,6 +516,7 @@ async function loadPropostas() {
           <div class="p-meta">${p.deliverables} deliverable${p.deliverables !== 1 ? 's' : ''} · ${p.objetivo.slice(0,80)}${p.objetivo.length>80?'...':''}</div>
         </div>
         <div class="p-actions">
+          <button class="btn-deletar" onclick="deletarProposta('${p.name}', '${p.sha}')">Deletar</button>
           <button class="btn-cr" onclick="changeRequest('${p.name}')">Change request</button>
           <button class="btn-aprovar" onclick="aprovarProposta('${p.name}', '${p.sha}')">Aprovar</button>
         </div>
@@ -567,6 +570,18 @@ async function aprovarProposta(filename, sha) {
 
     toast(`Proposta aprovada! ${tableRows.length} issue${tableRows.length!==1?'s':''} criado${tableRows.length!==1?'s':''}.`);
     await Promise.all([loadPropostas(), loadMilestones(), loadCampanhas(), loadDashboards()]);
+  } catch(err) { toast(`Erro: ${err.message}`, 'err'); }
+}
+
+async function deletarProposta(filename, sha) {
+  if (!confirm(`Deletar esta proposta?\n\nEsta ação não pode ser desfeita.`)) return;
+  try {
+    await ghFetch(`/repos/${REPO}/contents/propostas/ativas/${filename}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ message: `deletar proposta: ${filename}`, sha })
+    });
+    toast('Proposta deletada.');
+    loadPropostas();
   } catch(err) { toast(`Erro: ${err.message}`, 'err'); }
 }
 
