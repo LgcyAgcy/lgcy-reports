@@ -122,18 +122,15 @@
   a:hover { color: var(--text); }
 
   /* ── Breakdowns compactos abaixo da tabela ── */
-  .meta-row {
-    display: flex;
-    gap: 40px;
-    padding: 16px 0 20px;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-  }
+  .meta-row { padding: 16px 0 20px; }
   .meta-block h4 { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 10px; }
-  .sidebar-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px; gap: 24px; }
+  .plat-row { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 14px; }
+  .plat-item { min-width: 100px; }
+  .status-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px; gap: 16px; }
   .sidebar-row .label { color: var(--text-muted); }
   .sidebar-row .val { font-weight: 600; color: var(--text); }
-  .bar-wrap { margin-top: 3px; background: var(--border); border-radius: 2px; height: 2px; overflow: hidden; margin-bottom: 8px; }
+  .bar-wrap { margin-top: 3px; background: var(--border); border-radius: 2px; height: 2px; overflow: hidden; margin-bottom: 4px; }
   .bar-fill { height: 2px; background: #444; border-radius: 2px; }
 
   /* ── ER footnote ── */
@@ -193,7 +190,7 @@
 
   <header>
     <div class="logo">LGCY</div>
-    <span class="updated">Atualizado em 17/04/2026, 21:16:21</span>
+    <span class="updated">Atualizado em 17/04/2026, 21:22:23</span>
   </header>
   <main>
     <div class="top-row">
@@ -203,13 +200,9 @@
     <div class="meta-row">
       <div class="meta-block">
         <h4>Plataforma</h4>
-        <div class="sidebar-row"><span class="label">Instagram</span><span class="val">7</span></div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:70%"></div></div><div class="sidebar-row"><span class="label">YouTube</span><span class="val">3</span></div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:30%"></div></div>
-      </div>
-      <div class="meta-block">
+        <div class="plat-row"><div class="plat-item"><div class="sidebar-row"><span class="label">Instagram</span><span class="val">7</span></div><div class="bar-wrap"><div class="bar-fill" style="width:70%"></div></div></div><div class="plat-item"><div class="sidebar-row"><span class="label">YouTube</span><span class="val">3</span></div><div class="bar-wrap"><div class="bar-fill" style="width:30%"></div></div></div></div>
         <h4>Status</h4>
-        <div class="sidebar-row"><span class="label">Validado</span><span class="val">10</span></div>
+        <div class="status-row" style="margin-top:10px"><div class="sidebar-row"><span class="label">Validado</span><span class="val">10</span></div></div>
       </div>
     </div>
 
