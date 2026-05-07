@@ -703,7 +703,11 @@ async function loadCreators() {
   const issues = await ghFetch(`/repos/${REPO}/issues?state=all&per_page=100`);
   _creators = [...new Set(
     issues
-      .map(i => (i.body || '').match(/###\s*Creator\s*\n+(@\S+)/)?.[1])
+      .map(i => {
+        const m = (i.body || '').match(/###\s*Creator\s*\n+(@?\S+)/);
+        if (!m) return null;
+        return m[1].startsWith('@') ? m[1] : '@' + m[1];
+      })
       .filter(Boolean)
   )].sort();
 }
@@ -752,7 +756,8 @@ async function criarDeliverable(e) {
   btn.disabled = true;
   btn.textContent = 'Criando...';
 
-  const creator   = document.getElementById('f-creator').value.trim();
+  const creatorRaw = document.getElementById('f-creator').value.trim();
+  const creator   = creatorRaw.startsWith('@') ? creatorRaw : '@' + creatorRaw;
   const plat      = document.getElementById('f-plataforma').value;
   const formato   = document.getElementById('f-formato').value;
   const tipo      = document.getElementById('f-tipo').value;
