@@ -175,7 +175,8 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Creator *</label>
-          <input id="f-creator" placeholder="@creator" required>
+          <input id="f-creator" placeholder="@creator" required list="creators-list" autocomplete="off">
+          <datalist id="creators-list"></datalist>
         </div>
         <div class="form-group">
           <label>Plataforma *</label>
@@ -694,6 +695,18 @@ async function fecharCampanha(num, title) {
   } catch(err) { toast(`Erro: ${err.message}`, 'err'); }
 }
 
+// ── Creators autocomplete ─────────────────────────────────────────────────────
+async function loadCreators() {
+  const issues = await ghFetch(`/repos/${REPO}/issues?state=all&per_page=100`);
+  const creators = [...new Set(
+    issues
+      .map(i => (i.body || '').match(/###\s*Creator\s*\n+(@\S+)/)?.[1])
+      .filter(Boolean)
+  )].sort();
+  const dl = document.getElementById('creators-list');
+  dl.innerHTML = creators.map(c => `<option value="${c}">`).join('');
+}
+
 // ── Milestones ────────────────────────────────────────────────────────────────
 async function loadMilestones() {
   const ms = await ghFetch(`/repos/${REPO}/milestones?state=open&per_page=50`);
@@ -959,7 +972,7 @@ async function initApp() {
     document.getElementById('login-overlay').style.display = 'none';
     document.getElementById('main-nav').style.display = 'flex';
     document.getElementById('tab-novo').classList.add('active');
-    await Promise.all([loadMilestones(), loadDashboards()]);
+    await Promise.all([loadMilestones(), loadDashboards(), loadCreators()]);
   } catch(e) {
     document.getElementById('login-overlay').style.display = 'flex';
     document.getElementById('main-nav').style.display = 'none';
